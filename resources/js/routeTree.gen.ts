@@ -9,27 +9,51 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthenticatedHomeRouteImport } from './routes/_unauthenticated/home'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const UnauthenticatedHomeRoute = UnauthenticatedHomeRouteImport.update({
+  id: '/_unauthenticated/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/home': typeof UnauthenticatedHomeRoute
+}
+export interface FileRoutesByTo {
+  '/home': typeof UnauthenticatedHomeRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_unauthenticated/home': typeof UnauthenticatedHomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/home'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/home'
+  id: '__root__' | '/_unauthenticated/home'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  UnauthenticatedHomeRoute: typeof UnauthenticatedHomeRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_unauthenticated/home': {
+      id: '/_unauthenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof UnauthenticatedHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  UnauthenticatedHomeRoute: UnauthenticatedHomeRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
