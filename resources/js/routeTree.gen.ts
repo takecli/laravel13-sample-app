@@ -9,50 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UnauthenticatedHomeRouteImport } from './routes/_unauthenticated/home'
+import { Route as IndexRouteImport } from './routes/index'
 
-const UnauthenticatedHomeRoute = UnauthenticatedHomeRouteImport.update({
-  id: '/_unauthenticated/home',
-  path: '/home',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/home': typeof UnauthenticatedHomeRoute
+  '/': typeof IndexRoute
 }
 export interface FileRoutesByTo {
-  '/home': typeof UnauthenticatedHomeRoute
+  '/': typeof IndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_unauthenticated/home': typeof UnauthenticatedHomeRoute
+  '/': typeof IndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/home'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/home'
-  id: '__root__' | '/_unauthenticated/home'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  UnauthenticatedHomeRoute: typeof UnauthenticatedHomeRoute
+  IndexRoute: typeof IndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_unauthenticated/home': {
-      id: '/_unauthenticated/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof UnauthenticatedHomeRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  UnauthenticatedHomeRoute: UnauthenticatedHomeRoute,
+  IndexRoute: IndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
