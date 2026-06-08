@@ -3,7 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
     plugins: [
@@ -16,9 +16,14 @@ export default defineConfig({
                 }),
             ],
         }),
+        tanstackRouter({
+            target: 'react',
+            autoCodeSplitting: true,
+            routesDirectory: './resources/js/routes',
+            generatedRouteTree: './resources/js/routeTree.gen.ts',
+        }),
         react(),
         tailwindcss(),
-        TanStackRouterVite(),
     ],
     server: {
         watch: {
