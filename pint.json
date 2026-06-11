@@ -1,0 +1,9 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "no_superfluous_phpdoc_tags": false,
+        "phpdoc_add_missing_param_annotation": {
+            "only_untyped": false
+        }
+    }
+}

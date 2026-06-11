@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -13,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // 認証は Keycloak SSO。password は保持せず、keycloak_id で名寄せする。
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         CREATE TABLE users (
             id CHAR(36) NOT NULL,
             keycloak_id VARCHAR(255) NOT NULL COMMENT "Keycloakのsub",
@@ -29,7 +28,7 @@ SQL;
         DB::statement($sql);
 
         // Laravel のセッション（database ドライバ）用。user_id は UUID に合わせる。
-        $sessions = <<<SQL
+        $sessions = <<<'SQL'
         CREATE TABLE sessions (
             id VARCHAR(255) NOT NULL,
             user_id CHAR(36) NOT NULL COMMENT "ユーザーID",

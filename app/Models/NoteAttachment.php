@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class NoteAttachment
- * 
+ *
  * @property string $id
  * @property string $note_id
  * @property string $file_path
@@ -26,27 +26,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
  * @property string|null $deleted_user_id
- *
- * @package App\Models
  */
 class NoteAttachment extends Model
 {
-	use SoftDeletes, HasUuids;
-	protected $table = 'note_attachments';
-	public $incrementing = false;
+    use HasUuids, SoftDeletes;
 
-	protected $casts = [
-		'file_size' => 'int'
-	];
+    protected $table = 'note_attachments';
 
-	protected $fillable = [
-		'note_id',
-		'file_path',
-		'file_name',
-		'mime_type',
-		'file_size',
-		'created_user_id',
-		'updated_user_id',
-		'deleted_user_id'
-	];
+    public $incrementing = false;
+
+    protected $casts = [
+        'file_size' => 'int',
+    ];
+
+    protected $fillable = [
+        'note_id',
+        'file_path',
+        'file_name',
+        'mime_type',
+        'file_size',
+        'created_user_id',
+        'updated_user_id',
+        'deleted_user_id',
+    ];
 }

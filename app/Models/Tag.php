@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Tag
- * 
+ *
  * @property string $id
  * @property string $name
  * @property Carbon $created_at
@@ -22,19 +22,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
  * @property string|null $deleted_user_id
- *
- * @package App\Models
  */
 class Tag extends Model
 {
-	use SoftDeletes, HasUuids;
-	protected $table = 'tags';
-	public $incrementing = false;
+    use HasUuids, SoftDeletes;
 
-	protected $fillable = [
-		'name',
-		'created_user_id',
-		'updated_user_id',
-		'deleted_user_id'
-	];
+    protected $table = 'tags';
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'name',
+        'created_user_id',
+        'updated_user_id',
+        'deleted_user_id',
+    ];
 }

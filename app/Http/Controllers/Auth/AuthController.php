@@ -15,9 +15,9 @@ class AuthController extends Controller
 {
     /**
      * 認証情報取得
-     * 
-     * @param Request $request
-     * @param int $vesrion
+     *
+     * @param  Request  $request
+     * @param  int  $vesrion
      * @return JsonResponse
      */
     public function getUser(Request $request, int $vesrion): JsonResponse
@@ -25,6 +25,7 @@ class AuthController extends Controller
         try {
             $user = Auth::user();
             $data = (new UserResource($user))->toArray($request);
+
             return ApiResponse::success(__('success', ['action' => 'Get', 'resource' => 'User']), $data);
         } catch (Exception $e) {
             $msg = __('messages.error', ['action' => 'Get', 'resource' => 'User']);

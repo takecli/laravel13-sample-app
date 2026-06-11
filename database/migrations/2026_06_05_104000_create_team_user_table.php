@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -13,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // ユーザーとチームの多対多。role でチーム内の権限を表現する。
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         CREATE TABLE team_user (
             id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
             team_id CHAR(36) NOT NULL COMMENT "チームID",

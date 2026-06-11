@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -12,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         CREATE TABLE note_comments (
             id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
             note_id CHAR(36) NOT NULL COMMENT "記事ID",

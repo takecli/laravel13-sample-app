@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class NoteComment
- * 
+ *
  * @property string $id
  * @property string $note_id
  * @property string $comment
@@ -23,20 +23,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
  * @property string|null $deleted_user_id
- *
- * @package App\Models
  */
 class NoteComment extends Model
 {
-	use SoftDeletes, HasUuids;
-	protected $table = 'note_comments';
-	public $incrementing = false;
+    use HasUuids, SoftDeletes;
 
-	protected $fillable = [
-		'note_id',
-		'comment',
-		'created_user_id',
-		'updated_user_id',
-		'deleted_user_id'
-	];
+    protected $table = 'note_comments';
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'note_id',
+        'comment',
+        'created_user_id',
+        'updated_user_id',
+        'deleted_user_id',
+    ];
 }

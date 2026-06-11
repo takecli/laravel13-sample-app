@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class NoteLike
- * 
+ *
  * @property string $id
  * @property string $note_id
  * @property string $user_id
@@ -20,20 +20,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
- *
- * @package App\Models
  */
 class NoteLike extends Model
 {
-	use HasUuids;
-	
-	protected $table = 'note_likes';
-	public $incrementing = false;
+    use HasUuids;
 
-	protected $fillable = [
-		'note_id',
-		'user_id',
-		'created_user_id',
-		'updated_user_id'
-	];
+    protected $table = 'note_likes';
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'note_id',
+        'user_id',
+        'created_user_id',
+        'updated_user_id',
+    ];
 }

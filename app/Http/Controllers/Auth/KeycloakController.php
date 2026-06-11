@@ -17,9 +17,9 @@ class KeycloakController extends Controller
 {
     /**
      * リダイレクト
-     * 
-     * @param Request $request
-     * @param int $version
+     *
+     * @param  Request  $request
+     * @param  int  $version
      * @return JsonResponse|RedirectResponse|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirect(Request $request, int $version): RedirectResponse|JsonResponse
@@ -27,7 +27,7 @@ class KeycloakController extends Controller
         try {
             return Socialite::driver('keycloak')->redirect();
         } catch (Exception $e) {
-            Log::error(__('messages.error', ['Redirect' , 'resource' => 'Auth']));
+            Log::error(__('messages.error', ['Redirect', 'resource' => 'Auth']));
             report($e);
 
             return ApiResponse::serverError();
@@ -39,7 +39,7 @@ class KeycloakController extends Controller
         try {
             $keycloakUser = Socialite::driver('keycloak')->stateless()->user();
             if ($keycloakUser) {
-                $user =User::firstOrCreate([
+                $user = User::firstOrCreate([
                     'keycloak_id' => $keycloakUser->getId(),
                 ], [
                     'name' => $keycloakUser->getName(),
@@ -51,9 +51,10 @@ class KeycloakController extends Controller
                 }
             }
 
-            return redirect('/dashbord'); 
+            return redirect('/dashbord');
         } catch (Exception $e) {
             dd($e);
+
             return redirect('/error');
         }
     }

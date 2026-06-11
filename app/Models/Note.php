@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Note
- * 
+ *
  * @property string $id
  * @property string $team_id
  * @property string $title
@@ -26,27 +26,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
  * @property string|null $deleted_user_id
- *
- * @package App\Models
  */
 class Note extends Model
 {
-	use SoftDeletes, HasUuids;
-	protected $table = 'notes';
-	public $incrementing = false;
+    use HasUuids, SoftDeletes;
 
-	protected $casts = [
-		'published_at' => 'datetime'
-	];
+    protected $table = 'notes';
 
-	protected $fillable = [
-		'team_id',
-		'title',
-		'content',
-		'status',
-		'published_at',
-		'created_user_id',
-		'updated_user_id',
-		'deleted_user_id'
-	];
+    public $incrementing = false;
+
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
+
+    protected $fillable = [
+        'team_id',
+        'title',
+        'content',
+        'status',
+        'published_at',
+        'created_user_id',
+        'updated_user_id',
+        'deleted_user_id',
+    ];
 }

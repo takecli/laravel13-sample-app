@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class TeamUser
- * 
+ *
  * @property string $id
  * @property string $team_id
  * @property string $user_id
@@ -21,21 +21,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * @property string|null $created_user_id
  * @property string|null $updated_user_id
- *
- * @package App\Models
  */
 class TeamUser extends Model
 {
-	use HasUuids;
+    use HasUuids;
 
-	protected $table = 'team_user';
-	public $incrementing = false;
+    protected $table = 'team_user';
 
-	protected $fillable = [
-		'team_id',
-		'user_id',
-		'role',
-		'created_user_id',
-		'updated_user_id'
-	];
+    public $incrementing = false;
+
+    protected $fillable = [
+        'team_id',
+        'user_id',
+        'role',
+        'created_user_id',
+        'updated_user_id',
+    ];
 }

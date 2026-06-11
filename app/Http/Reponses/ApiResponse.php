@@ -8,29 +8,26 @@ final class ApiResponse
 {
     /**
      * 正常系
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @param int $status
-     * @param array $headers
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  mixed  $data
+     * @param  int  $status
+     * @param  array  $headers
      */
     public static function success(
         string $message,
         mixed $data,
         int $status = JsonResponse::HTTP_OK,
-        array $headers = [] 
-    ): JsonResponse
-    {
+        array $headers = []
+    ): JsonResponse {
         return self::json(true, $message, $data, $status, $headers);
     }
 
     /**
      * 400 - 不正なリクエスト
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  null|mixed  $data
      */
     public static function badRequest(string $message = 'Bad Request', mixed $data = null): JsonResponse
     {
@@ -39,10 +36,9 @@ final class ApiResponse
 
     /**
      * 401 - 認証エラー
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  null|mixed  $data
      */
     public static function unauthenticate(string $message = 'Unauthenticate.', mixed $data = null): JsonResponse
     {
@@ -51,10 +47,9 @@ final class ApiResponse
 
     /**
      * 403 - 認可エラー
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  null|mixed  $data
      */
     public static function forbidden(string $message = 'Unauthorized.', mixed $data = null): JsonResponse
     {
@@ -63,10 +58,9 @@ final class ApiResponse
 
     /**
      * 404 - 不明リソース
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  null|mixed  $data
      */
     public static function notFound(string $message = 'NotFound', mixed $data = null): JsonResponse
     {
@@ -75,10 +69,9 @@ final class ApiResponse
 
     /**
      * 500 - サーバーエラー
-     * 
-     * @param string $message
-     * @param mixed $data
-     * @return JsonResponse
+     *
+     * @param  string  $message
+     * @param  null|mixed  $data
      */
     public static function serverError(string $message = 'Server Error', mixed $data = null): JsonResponse
     {
@@ -91,8 +84,7 @@ final class ApiResponse
         mixed $data,
         int $status,
         ?array $headers = []
-    ): JsonResponse
-    {
+    ): JsonResponse {
         return response()->json([
             'data' => $data,
             'message' => $message,
