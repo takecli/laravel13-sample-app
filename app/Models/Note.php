@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,17 +31,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Note extends Model
 {
-	use SoftDeletes;
+	use SoftDeletes, HasUuids;
 	protected $table = 'notes';
 	public $incrementing = false;
 
 	protected $casts = [
-		'id' => 'binary',
-		'team_id' => 'binary',
-		'published_at' => 'datetime',
-		'created_user_id' => 'binary',
-		'updated_user_id' => 'binary',
-		'deleted_user_id' => 'binary'
+		'published_at' => 'datetime'
 	];
 
 	protected $fillable = [

@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,17 +28,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class NoteComment extends Model
 {
-	use SoftDeletes;
+	use SoftDeletes, HasUuids;
 	protected $table = 'note_comments';
 	public $incrementing = false;
-
-	protected $casts = [
-		'id' => 'binary',
-		'note_id' => 'binary',
-		'created_user_id' => 'binary',
-		'updated_user_id' => 'binary',
-		'deleted_user_id' => 'binary'
-	];
 
 	protected $fillable = [
 		'note_id',

@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -25,16 +26,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TeamUser extends Model
 {
+	use HasUuids;
+
 	protected $table = 'team_user';
 	public $incrementing = false;
-
-	protected $casts = [
-		'id' => 'binary',
-		'team_id' => 'binary',
-		'user_id' => 'binary',
-		'created_user_id' => 'binary',
-		'updated_user_id' => 'binary'
-	];
 
 	protected $fillable = [
 		'team_id',

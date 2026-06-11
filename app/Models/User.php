@@ -7,7 +7,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticated;
 
 /**
  * Class User
@@ -16,26 +18,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $keycloak_id
  * @property string $name
  * @property string $email
- * @property Carbon|null $email_verified_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticated
 {
+	use HasUuids;
+
 	protected $table = 'users';
 	public $incrementing = false;
-
-	protected $casts = [
-		'id' => 'binary',
-		'email_verified_at' => 'datetime'
-	];
 
 	protected $fillable = [
 		'keycloak_id',
 		'name',
-		'email',
-		'email_verified_at'
+		'email'
 	];
 }

@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,16 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class NoteTag extends Model
 {
+	use HasUuids;
+
 	protected $table = 'note_tag';
 	public $incrementing = false;
-
-	protected $casts = [
-		'id' => 'binary',
-		'note_id' => 'binary',
-		'tag_id' => 'binary',
-		'created_user_id' => 'binary',
-		'updated_user_id' => 'binary'
-	];
 
 	protected $fillable = [
 		'note_id',

@@ -15,11 +15,10 @@ return new class extends Migration
         // 認証は Keycloak SSO。password は保持せず、keycloak_id で名寄せする。
         $sql = <<<SQL
         CREATE TABLE users (
-            id BINARY(16) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             keycloak_id VARCHAR(255) NOT NULL COMMENT "Keycloakのsub",
             `name` VARCHAR(255) NOT NULL COMMENT "氏名",
             email VARCHAR(255) NOT NULL COMMENT "メールアドレス",
-            email_verified_at TIMESTAMP NULL COMMENT "メール確認日時",
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "作成日",
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "更新日",
             PRIMARY KEY (id),
@@ -33,7 +32,7 @@ SQL;
         $sessions = <<<SQL
         CREATE TABLE sessions (
             id VARCHAR(255) NOT NULL,
-            user_id BINARY(16) NULL COMMENT "ユーザーID",
+            user_id CHAR(36) NOT NULL COMMENT "ユーザーID",
             ip_address VARCHAR(45) NULL,
             user_agent TEXT NULL,
             payload LONGTEXT NOT NULL,

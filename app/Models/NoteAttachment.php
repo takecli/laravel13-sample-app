@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,17 +31,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class NoteAttachment extends Model
 {
-	use SoftDeletes;
+	use SoftDeletes, HasUuids;
 	protected $table = 'note_attachments';
 	public $incrementing = false;
 
 	protected $casts = [
-		'id' => 'binary',
-		'note_id' => 'binary',
-		'file_size' => 'int',
-		'created_user_id' => 'binary',
-		'updated_user_id' => 'binary',
-		'deleted_user_id' => 'binary'
+		'file_size' => 'int'
 	];
 
 	protected $fillable = [
