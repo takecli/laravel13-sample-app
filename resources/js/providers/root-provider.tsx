@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import type { PropsWithChildren } from "react";
 import { system } from "@/theme";
 import { ColorModeProvider } from "@/providers/color-mode-provider";
+import { AuthProvider } from "@/context/auth-context";
 
 /**
  * アプリ全体のプロバイダ。
@@ -10,8 +11,10 @@ import { ColorModeProvider } from "@/providers/color-mode-provider";
  */
 export function RootProvider({ children }: PropsWithChildren) {
     return (
-        <ChakraProvider value={system}>
-            <ColorModeProvider defaultTheme="light" >{children}</ColorModeProvider>
-        </ChakraProvider>
+        <AuthProvider>
+            <ChakraProvider value={system}>
+                <ColorModeProvider defaultTheme="light" >{children}</ColorModeProvider>
+            </ChakraProvider>
+        </AuthProvider>
     );
 }
