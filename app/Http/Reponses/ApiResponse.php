@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Reponses;
+
 use Illuminate\Http\JsonResponse;
 
 final class ApiResponse
