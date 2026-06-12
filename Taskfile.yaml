@@ -3,3 +3,5 @@ version: 3
 includes:
   php:
     taskfile: ./tasks/php/Taskfile.yaml
+  migrate:
+    taskfile: ./tasks/migrate/Taskfile.yaml

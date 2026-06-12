@@ -1,0 +1,19 @@
+version: 3
+
+tasks:
+  apply:
+    desc: "マイグレーション実行"
+    cmds:
+      - docker compose exec app php artisan migrate
+  rollback:
+    desc: "ロールバック実行"
+    cmds:
+      - docker compose exec app php artisan migrate:rollback
+  fresh:
+    desc: "ロールバック&マイグレーション実行"
+    cmds:
+      - docker compose exec app php artisan migrate:fresh
+  seed:
+    desc: "シード実行"
+    cmds:
+      - docker compose exec app php artisan db:seed

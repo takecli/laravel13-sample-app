@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticated;
 
 /**
@@ -22,7 +23,7 @@ use Illuminate\Foundation\Auth\User as Authenticated;
  */
 class User extends Authenticated
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $table = 'users';
 
