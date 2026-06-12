@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\KeycloakController;
 use Illuminate\Support\Facades\Route;
@@ -19,5 +20,11 @@ Route::group(['prefix' => 'api/v{version}'], function () {
             // 認証情報 - 取得 /api/v1/auth
             Route::get('', [AuthController::class, 'getUser']);
         });
+    });
+
+    // チーム
+    Route::group(['prefix' => 'teams'], function () {
+        // チーム一覧 /api/v1/teams
+        Route::get('', [TeamController::class, 'listTeam']);
     });
 });

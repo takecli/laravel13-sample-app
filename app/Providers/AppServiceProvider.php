@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domains\Repositories\TeamRepositoryInterface;
+use App\Infra\Persistence\TeamRepository;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use SocialiteProviders\Keycloak\Provider;
@@ -14,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
     }
 
     /**

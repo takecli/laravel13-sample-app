@@ -15,6 +15,8 @@ return new class extends Migration
         CREATE TABLE teams (
             id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
             `name` VARCHAR(255) NOT NULL COMMENT "チーム名",
+            `description` TEXT NOT NULL COMMENT "チーム説明",
+            public_status ENUM('invitation', 'public') NOT NULL DEFAULT "public" COMMENT "公開ステータス",
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "作成日",
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "更新日",
             deleted_at TIMESTAMP NULL COMMENT "削除日",
