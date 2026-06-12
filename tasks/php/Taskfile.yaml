@@ -1,0 +1,7 @@
+version: 3
+
+tasks:
+  pint:
+    desc: "Pint実行"
+    cmds:
+      - docker compose exec app ./vendor/bin/pint
