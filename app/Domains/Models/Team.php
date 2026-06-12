@@ -2,7 +2,7 @@
 
 namespace App\Domains\Models;
 
-use PublicStatus;
+use App\Domains\Enums\Team\PublicStatus;
 
 final class Team
 {

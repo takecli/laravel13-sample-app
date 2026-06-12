@@ -20,7 +20,7 @@ final class TeamRepository implements TeamRepositoryInterface
                 $q->whereHas('teamUsers', fn ($q0) => $q0->where('user_id', $userId));
             })
             ->when($input->name, function (Builder $q, string $name) {
-                $q->where('name', 'like', sprintf('\%%s\%', $name));
+                $q->where('name', 'like', sprintf('%%%s%%', $name));
             })
             ->simplePaginate($input->limit);
 
