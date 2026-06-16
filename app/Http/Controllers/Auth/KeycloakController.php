@@ -53,7 +53,8 @@ class KeycloakController extends Controller
 
             return redirect('/dashbord');
         } catch (Exception $e) {
-            dd($e);
+            Log::error(__('messages.error', ['Callback', 'resource' => 'Auth']));
+            report($e);
 
             return redirect('/error');
         }

@@ -26,6 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Xdebug（テストのコードカバレッジ計測 / デバッグ用）
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo 'xdebug.mode=coverage' > /usr/local/etc/php/conf.d/zz-xdebug.ini
+
 # Composer をインストール（公式イメージからバイナリをコピー）
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

@@ -5,3 +5,11 @@ tasks:
     desc: "Pint実行"
     cmds:
       - docker compose exec app ./vendor/bin/pint
+  coverage-text:
+    desc: "カバレッジ計測(ターミナル出力)"
+    cmds:
+      - docker compose exec app ./vendor/bin/phpunit --coverage-text
+  coverage-html:
+    desc: "カバレッジ計測(HTML出力)"
+    cmds:
+      - docker compose exec app ./vendor/bin/phpunit --coverage-html coverage/
