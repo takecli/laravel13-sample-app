@@ -34,6 +34,13 @@ class KeycloakController extends Controller
         }
     }
 
+    /**
+     * コールバック
+     *
+     * @param  Request  $request
+     * @param  int  $version
+     * @return RedirectResponse
+     */
     public function callback(Request $request, int $version): RedirectResponse
     {
         try {

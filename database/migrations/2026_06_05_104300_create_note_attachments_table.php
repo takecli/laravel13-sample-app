@@ -14,7 +14,7 @@ return new class extends Migration
         // 記事に紐づく添付ファイル（スライド・PDF・画像など）。
         $sql = <<<'SQL'
         CREATE TABLE note_attachments (
-            id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             note_id CHAR(36) NOT NULL COMMENT "記事ID",
             file_path VARCHAR(2048) NOT NULL COMMENT "保存先パス",
             file_name VARCHAR(255) NOT NULL COMMENT "元のファイル名",

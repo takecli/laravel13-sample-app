@@ -14,7 +14,7 @@ return new class extends Migration
         // 記事とタグの多対多。
         $sql = <<<'SQL'
         CREATE TABLE note_tag (
-            id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             note_id CHAR(36) NOT NULL COMMENT "記事ID",
             tag_id CHAR(36) NOT NULL COMMENT "タグID",
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "作成日",

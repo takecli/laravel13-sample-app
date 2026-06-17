@@ -13,7 +13,7 @@ return new class extends Migration
     {
         $sql = <<<'SQL'
         CREATE TABLE tags (
-            id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             `name` VARCHAR(255) NOT NULL COMMENT "タグ名",
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "作成日",
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "更新日",

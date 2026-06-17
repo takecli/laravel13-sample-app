@@ -13,7 +13,7 @@ return new class extends Migration
     {
         $sql = <<<'SQL'
         CREATE TABLE notes (
-            id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             team_id CHAR(36) NOT NULL COMMENT "チームID",
             title VARCHAR(255) NOT NULL COMMENT "タイトル",
             content TEXT NOT NULL COMMENT "本文",

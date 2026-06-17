@@ -14,7 +14,7 @@ return new class extends Migration
         // ユーザーとチームの多対多。role でチーム内の権限を表現する。
         $sql = <<<'SQL'
         CREATE TABLE team_user (
-            id CHAR(36) NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+            id CHAR(36) NOT NULL,
             team_id CHAR(36) NOT NULL COMMENT "チームID",
             user_id CHAR(36) NOT NULL COMMENT "ユーザーID",
             role ENUM('admin', 'member') NOT NULL DEFAULT 'member' COMMENT "チーム内ロール",
