@@ -35,10 +35,11 @@ final class TeamDomainTest extends TestCase
     #[Test]
     public function list_team_search_に渡した値を保持する(): void
     {
-        $search = new ListTeamSearch('user-1', 'dev', 2, 10, '+name');
+        $search = new ListTeamSearch('user-1', 'dev', PublicStatus::Public, 2, 10, '+name');
 
         $this->assertSame('user-1', $search->userId);
         $this->assertSame('dev', $search->name);
+        $this->assertSame(PublicStatus::Public, $search->publicStatus);
         $this->assertSame(2, $search->page);
         $this->assertSame(10, $search->limit);
         $this->assertSame('+name', $search->sort);

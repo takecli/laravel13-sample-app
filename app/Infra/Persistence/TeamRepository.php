@@ -2,6 +2,7 @@
 
 namespace App\Infra\Persistence;
 
+use App\Domains\Enums\Team\PublicStatus;
 use App\Domains\Models\Filter\ListTeamSearch;
 use App\Domains\Models\Result\ListTeamResult;
 use App\Domains\Models\Team as TeamEntity;
@@ -21,6 +22,9 @@ final class TeamRepository implements TeamRepositoryInterface
             })
             ->when($input->name, function (Builder $q, string $name) {
                 $q->where('name', 'like', sprintf('%%%s%%', $name));
+            })
+            ->when($input->publicStatus, function (Builder $q, PublicStatus $publicStatus) {
+                $q->where('public_status', $publicStatus->value);
             })
             ->simplePaginate($input->limit);
 

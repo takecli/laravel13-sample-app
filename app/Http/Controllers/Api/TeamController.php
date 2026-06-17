@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Applications\Input\Team\ListTeamInput;
 use App\Applications\UseCase\Team\ListTeamUseCase;
 use App\Http\Controllers\Controller;
 use App\Http\Reponses\ApiResponse;
@@ -17,8 +16,7 @@ class TeamController extends Controller
     public function listTeam(ListTeamRequest $request, int $version, ListTeamUseCase $usecase): JsonResponse
     {
         try {
-            $params = $request->validated();
-            $res = $usecase->execute(new ListTeamInput(...$params));
+            $res = $usecase->execute($request->toInput());
             $resource = (new TeamsResource($res))->toArray($request);
 
             return ApiResponse::success(__('messages.success', ['action' => 'Get', 'Teams']), $resource);

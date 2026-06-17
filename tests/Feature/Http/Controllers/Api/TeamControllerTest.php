@@ -36,6 +36,20 @@ final class TeamControllerTest extends TestCase
     }
 
     #[Test]
+    public function public_statusで絞り込める(): void
+    {
+        TeamModel::factory()->create();               // public（ファクトリ既定）
+        TeamModel::factory()->invitation()->create(); // invitation
+
+        $res = $this->getJson('/api/v1/teams?public_status=invitation');
+
+        $res->assertOk()
+            ->assertJsonPath('data.total', 1)
+            ->assertJsonCount(1, 'data.teams')
+            ->assertJsonPath('data.teams.0.public_status', 'invitation');
+    }
+
+    #[Test]
     public function 例外発生時は500で_resultフォールスを返す(): void
     {
         // Repository を例外送出モックに差し替え、catch 分岐へ入れる

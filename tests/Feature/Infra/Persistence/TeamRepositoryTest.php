@@ -42,7 +42,7 @@ final class TeamRepositoryTest extends TestCase
         TeamModel::factory()->count(3)->create();
 
         $result = $this->repository->listTeam(
-            new ListTeamSearch(null, null, 1, 20, '+id')
+            new ListTeamSearch(null, null, null, 1, 20, '+id')
         );
 
         $this->assertInstanceOf(ListTeamResult::class, $result);
@@ -59,7 +59,7 @@ final class TeamRepositoryTest extends TestCase
         TeamModel::factory()->create(['name' => 'Sales Team']);
 
         $result = $this->repository->listTeam(
-            new ListTeamSearch(null, 'Engineering', 1, 20, '+id')
+            new ListTeamSearch(null, 'Engineering', null, 1, 20, '+id')
         );
 
         $this->assertCount(1, $result->teams);
@@ -80,7 +80,7 @@ final class TeamRepositoryTest extends TestCase
         ]);
 
         $result = $this->repository->listTeam(
-            new ListTeamSearch($userId, null, 1, 20, '+id')
+            new ListTeamSearch($userId, null, null, 1, 20, '+id')
         );
 
         $this->assertCount(1, $result->teams);
@@ -93,9 +93,23 @@ final class TeamRepositoryTest extends TestCase
         TeamModel::factory()->count(5)->create();
 
         $result = $this->repository->listTeam(
-            new ListTeamSearch(null, null, 1, 2, '+id')
+            new ListTeamSearch(null, null, null, 1, 2, '+id')
         );
 
         $this->assertCount(2, $result->teams);
+    }
+
+    #[Test]
+    public function public_statusでフィルタする(): void
+    {
+        TeamModel::factory()->create();               // public（ファクトリ既定）
+        TeamModel::factory()->invitation()->create(); // invitation
+
+        $result = $this->repository->listTeam(
+            new ListTeamSearch(null, null, PublicStatus::Invitation, 1, 20, '+id')
+        );
+
+        $this->assertCount(1, $result->teams);
+        $this->assertSame(PublicStatus::Invitation, $result->teams[0]->publicStatus);
     }
 }

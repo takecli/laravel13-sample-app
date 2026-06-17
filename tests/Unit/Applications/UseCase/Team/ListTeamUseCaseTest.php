@@ -5,6 +5,7 @@ namespace Tests\Unit\Applications\UseCase\Team;
 use App\Applications\Input\Team\ListTeamInput;
 use App\Applications\Output\Team\ListTeamOutput;
 use App\Applications\UseCase\Team\ListTeamUseCase;
+use App\Domains\Enums\Team\PublicStatus;
 use App\Domains\Models\Filter\ListTeamSearch;
 use App\Domains\Models\Result\ListTeamResult;
 use App\Domains\Models\Team as TeamEntity;
@@ -33,6 +34,7 @@ final class ListTeamUseCaseTest extends TestCase
         $input = new ListTeamInput(
             userId: 'user-1',
             name: 'dev',
+            publicStatus: PublicStatus::Public,
             page: 2,
             limit: 10,
             sort: '+name',
@@ -49,6 +51,7 @@ final class ListTeamUseCaseTest extends TestCase
             ->withArgs(function (ListTeamSearch $search): bool {
                 return $search->userId === 'user-1'
                     && $search->name === 'dev'
+                    && $search->publicStatus === PublicStatus::Public
                     && $search->page === 2
                     && $search->limit === 10
                     && $search->sort === '+name';
@@ -76,6 +79,7 @@ final class ListTeamUseCaseTest extends TestCase
             ->withArgs(function (ListTeamSearch $search): bool {
                 return $search->userId === null
                     && $search->name === null
+                    && $search->publicStatus === null
                     && $search->page === 1     // Pagination::PAGE_DEFAULT
                     && $search->limit === 20   // Pagination::LIMIT_DEFAULT
                     && $search->sort === '+id'; // Pagination::SORT_DEFAULT

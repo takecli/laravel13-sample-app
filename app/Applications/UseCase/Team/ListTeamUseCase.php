@@ -24,6 +24,7 @@ final class ListTeamUseCase
         $result = $this->teamRepo->listTeam(new ListTeamSearch(
             $input->userId,
             $input->name,
+            $input->publicStatus,
             $input->page,
             $input->limit,
             $input->sort

@@ -55,7 +55,7 @@ alwaysApply: false
 - **Applications/**（UseCase）: Input を受け取り、Domain の Filter に詰め替え、リポジトリ**インターフェース**経由でドメインを操作し、Output を返す。Eloquent を直接触らない。
 - **Infra/Persistence/**: リポジトリ**実装**。ここだけが `App\Models`（Eloquent）に触れる。`#[Override]` を付け、`modelToDomain()` で Eloquent → ドメインエンティティへ変換する。
 - **Http/Controllers/**: **薄く**保つ。`validate → UseCase → Resource → ApiResponse` のみ。ビジネスロジックを持たない。
-- **Http/Requests/**: バリデーションは FormRequest に集約。
+- **Http/Requests/**: バリデーションに加え、**検証済み入力を Application 層の Input DTO へ詰め替える `toInput()` を持つ**（→「入力の組み立て」）。
 - **Http/Resources/**: 出力整形は JsonResource。
 - **App\Models/**: Reliese 生成の Eloquent。`HasUuids` / `$casts` / `$fillable` を定義。Infra 以外から使わない。
 
@@ -83,6 +83,29 @@ try {
 
 - レスポンスは必ず `App\Http\Reponses\ApiResponse`（`success`/`badRequest`/`unauthenticate`/`forbidden`/`notFound`/`serverError`）経由。`{ data, message, result }` エンベロープを守る。
 - ユーザー向け文言は `lang/en/*.php` の翻訳キー（`__('messages.*')`）。文字列直書きしない。
+
+## 入力の組み立て（FormRequest → Input DTO）
+
+HTTP 入力（生の文字列・snake_case キー・デフォルト補完）から **Application 層の Input DTO への詰め替えは FormRequest に集約**する。**Input DTO 側に変換処理（Caster 等）を持たせない。**
+
+- FormRequest に **`toInput(): XxxInput`** を実装し、文字列→enum 変換・キー名の対応付け・デフォルト補完をここで行う。
+- **Input DTO（Application層）は純粋な型付きの入れ物**に保つ。snake_case キーや「文字列で来る」といった transport の都合を持ち込まない。
+- enum 変換はバック付き enum の `from()` / `tryFrom()` を使い、**検証後の値だけ**を扱う（`validated()` 経由）。
+- Controller は `$usecase->execute($request->toInput())` のように**呼ぶだけ**にする（薄く保つ）。
+
+```php
+// app/Http/Requests/Team/ListTeamRequest.php
+public function toInput(): ListTeamInput
+{
+    return new ListTeamInput(
+        name: $this->validated('name'),
+        publicStatus: $this->publicStatus(), // 検証後に PublicStatus へ変換
+        page: (int) ($this->validated('page') ?? Pagination::PAGE_DEFAULT),
+        limit: (int) ($this->validated('limit') ?? Pagination::LIMIT_DEFAULT),
+        sort: $this->validated('sort') ?? Pagination::SORT_DEFAULT,
+    );
+}
+```
 
 ## テスト（カバレッジ 100% を維持）
 
@@ -115,5 +138,6 @@ PHPUnit 12。`Unit`／`Feature` の 2 スイート。**行カバレッジ 100%**
 - Domain 層に Laravel / Eloquent を持ち込む。
 - リポジトリをインターフェース無しで具象に直結する。
 - コントローラにビジネスロジックを書く。
+- Input DTO（Application層）に HTTP 入力の変換（文字列→enum 等）を持たせる（FormRequest の `toInput()` に集約する）。
 - テストメソッドに `test` プレフィックスを付ける（必ず `#[Test]` 属性を使う）。
 - `dd()` / `var_dump()` を残す。
