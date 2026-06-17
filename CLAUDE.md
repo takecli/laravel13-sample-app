@@ -21,10 +21,11 @@ Claude Code がこのリポジトリで作業するためのガイド。**実装
 | ファイル | 対象 | 内容 |
 |---|---|---|
 | `.claude/rules/general.md` | **常時** | 言語方針・ワークフロー・完了条件・禁止事項 |
+| `.claude/rules/sdd.md` | **常時** | 仕様駆動開発(SDD)の進め方：requests→spec→plan→実装 |
 | `.claude/rules/php.md` | `*.php` | Laravel / クリーンアーキテクチャ・テスト規約 |
 | `.claude/rules/typescript.md` | `*.ts` / `*.tsx` | React / TanStack Router / Chakra・API 規約 |
 
-→ **`.php` を編集するなら `php.md`、`.ts`/`.tsx` を編集するなら `typescript.md` を必ず参照する。**
+→ **`.php` を編集するなら `php.md`、`.ts`/`.tsx` を編集するなら `typescript.md` を必ず参照する。機能開発は `sdd.md` の順序に従う。**
 
 ---
 
