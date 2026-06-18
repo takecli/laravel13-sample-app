@@ -37,6 +37,18 @@ final class TeamRepository implements TeamRepositoryInterface
     }
 
     #[Override]
+    public function createTeam(TeamEntity $team): TeamEntity
+    {
+        $teamModel = TeamModel::create([
+            'name' => $team->name,
+            'description' => $team->description,
+            'public_status' => $team->publicStatus,
+        ]);
+
+        return self::modelToDomain($teamModel);
+    }
+
+    #[Override]
     public static function listToDomain(array $teamModels): array
     {
         $teams = [];
@@ -50,12 +62,11 @@ final class TeamRepository implements TeamRepositoryInterface
     #[Override]
     public static function modelToDomain(TeamModel $teamModel): TeamEntity
     {
-        $team = new TeamEntity;
-        $team->id = $teamModel->id;
-        $team->name = $teamModel->name;
-        $team->description = $teamModel->description;
-        $team->publicStatus = $teamModel->public_status;
-
-        return $team;
+        return new TeamEntity(
+            id: $teamModel->id,
+            name: $teamModel->name,
+            description: $teamModel->description,
+            publicStatus: $teamModel->public_status,
+        );
     }
 }

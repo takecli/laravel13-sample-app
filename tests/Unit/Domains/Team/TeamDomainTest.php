@@ -48,8 +48,7 @@ final class TeamDomainTest extends TestCase
     #[Test]
     public function list_team_result_はチーム一覧と総件数を保持する(): void
     {
-        $team = new TeamEntity;
-        $team->id = 'team-1';
+        $team = new TeamEntity(id: 'team-1');
 
         $result = new ListTeamResult([$team], 1);
 

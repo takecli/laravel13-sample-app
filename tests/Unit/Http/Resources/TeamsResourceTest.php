@@ -21,11 +21,12 @@ final class TeamsResourceTest extends TestCase
     #[Test]
     public function teams配列を整形し_totalを付与する(): void
     {
-        $team = new TeamEntity;
-        $team->id = 'team-1';
-        $team->name = 'dev team';
-        $team->description = '開発チーム';
-        $team->publicStatus = PublicStatus::Public;
+        $team = new TeamEntity(
+            id: 'team-1',
+            name: 'dev team',
+            description: '開発チーム',
+            publicStatus: PublicStatus::Public,
+        );
 
         $output = new ListTeamOutput([$team], 1);
 

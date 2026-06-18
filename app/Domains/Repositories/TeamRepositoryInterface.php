@@ -18,6 +18,14 @@ interface TeamRepositoryInterface
     public function listTeam(ListTeamSearch $input): ListTeamResult;
 
     /**
+     * チーム作成
+     *
+     * @param  TeamEntity  $team
+     * @return TeamEntity
+     */
+    public function createTeam(TeamEntity $team): TeamEntity;
+
+    /**
      * Model一覧をドメインモデル一覧へ変換
      *
      * @param  array  $teamModels

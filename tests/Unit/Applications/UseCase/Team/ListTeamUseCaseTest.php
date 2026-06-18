@@ -40,9 +40,7 @@ final class ListTeamUseCaseTest extends TestCase
             sort: '+name',
         );
 
-        $team = new TeamEntity;
-        $team->id = 'team-1';
-        $team->name = 'dev team';
+        $team = new TeamEntity(id: 'team-1', name: 'dev team');
 
         $repo = Mockery::mock(TeamRepositoryInterface::class);
         $repo->shouldReceive('listTeam')

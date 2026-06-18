@@ -62,4 +62,58 @@ final class TeamControllerTest extends TestCase
         $res->assertStatus(500)
             ->assertJsonPath('result', false);
     }
+
+    #[Test]
+    public function create_team_正常系_チームを作成して返す(): void
+    {
+        $payload = [
+            'name' => 'My Team',
+            'description' => '開発チーム',
+            'public_status' => 'public',
+        ];
+
+        $res = $this->postJson('/api/v1/teams', $payload);
+
+        $res->assertOk()
+            ->assertJsonPath('result', true)
+            ->assertJsonPath('data.name', 'My Team')
+            ->assertJsonPath('data.description', '開発チーム')
+            ->assertJsonPath('data.public_status', 'public');
+
+        $this->assertDatabaseHas('teams', [
+            'name' => 'My Team',
+            'description' => '開発チーム',
+            'public_status' => 'public',
+        ]);
+    }
+
+    #[Test]
+    public function create_team_必須項目が無いと422になる(): void
+    {
+        $res = $this->postJson('/api/v1/teams', []);
+
+        $res->assertStatus(422)
+            ->assertJsonValidationErrors(['name', 'description', 'public_status']);
+
+        $this->assertDatabaseCount('teams', 0);
+    }
+
+    #[Test]
+    public function create_team_例外時は500を返しロールバックする(): void
+    {
+        // Repository を例外送出モックに差し替え、catch(rollBack)分岐へ入れる
+        $repo = Mockery::mock(TeamRepositoryInterface::class);
+        $repo->shouldReceive('createTeam')->andThrow(new RuntimeException('boom'));
+        $this->app->instance(TeamRepositoryInterface::class, $repo);
+
+        $res = $this->postJson('/api/v1/teams', [
+            'name' => 'My Team',
+            'description' => '開発チーム',
+            'public_status' => 'public',
+        ]);
+
+        $res->assertStatus(500)
+            ->assertJsonPath('result', false);
+        $this->assertDatabaseCount('teams', 0);
+    }
 }

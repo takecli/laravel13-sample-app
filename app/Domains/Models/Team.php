@@ -6,27 +6,29 @@ use App\Domains\Enums\Team\PublicStatus;
 
 final class Team
 {
-    /** ID @var string */
-    public string $id;
+    public function __construct(
+        /** ID @var string */
+        public readonly string $id = '',
 
-    /** チーム名 @var string */
-    public string $name;
+        /** チーム名 @var string */
+        public readonly string $name = '',
 
-    /** 説明 @var string */
-    public string $description;
+        /** 説明 @var string */
+        public readonly string $description = '',
 
-    /** 公開ステータス @var PublicStatus */
-    public PublicStatus $publicStatus;
+        /** 公開ステータス @var PublicStatus */
+        public readonly PublicStatus $publicStatus = PublicStatus::Public,
 
-    /** 作成日 @var string */
-    public string $createdAt;
+        /** 作成日 @var string */
+        public readonly string $createdAt = '',
 
-    /** 更新日 @var string */
-    public string $updatedAt;
+        /** 更新日 @var string */
+        public readonly string $updatedAt = '',
 
-    /** 作成ユーザーID @var string */
-    public string $createdUserId;
+        /** 作成ユーザーID @var string */
+        public readonly string $createdUserId = '',
 
-    /** 更新ユーザーID @var string */
-    public string $updatedUserId;
+        /** 更新ユーザーID @var string */
+        public readonly string $updatedUserId = '',
+    ) {}
 }
