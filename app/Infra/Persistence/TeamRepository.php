@@ -49,6 +49,21 @@ final class TeamRepository implements TeamRepositoryInterface
     }
 
     #[Override]
+    public function updateTeam(TeamEntity $team): TeamEntity
+    {
+        $teamModel = TeamModel::find($team->id)
+            ?->fill([
+                'name' => $team->name,
+                'description' => $team->description,
+                'public_status' => $team->publicStatus,
+            ]);
+
+        $teamModel->save();
+
+        return self::modelToDomain($teamModel);
+    }
+
+    #[Override]
     public static function listToDomain(array $teamModels): array
     {
         $teams = [];

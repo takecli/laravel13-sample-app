@@ -26,6 +26,14 @@ interface TeamRepositoryInterface
     public function createTeam(TeamEntity $team): TeamEntity;
 
     /**
+     * チーム更新
+     *
+     * @param  TeamEntity  $team
+     * @return TeamEntity
+     */
+    public function updateTeam(TeamEntity $team): TeamEntity;
+
+    /**
      * Model一覧をドメインモデル一覧へ変換
      *
      * @param  array  $teamModels

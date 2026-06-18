@@ -116,4 +116,80 @@ final class TeamControllerTest extends TestCase
             ->assertJsonPath('result', false);
         $this->assertDatabaseCount('teams', 0);
     }
+
+    #[Test]
+    public function update_team_正常系_チームを更新して返す(): void
+    {
+        $team = TeamModel::factory()->create([
+            'name' => 'Old Team',
+            'description' => '旧説明',
+            'public_status' => 'public',
+        ]);
+
+        $res = $this->putJson("/api/v1/teams/{$team->id}", [
+            'name' => 'New Team',
+            'description' => '新説明',
+            'public_status' => 'invitation',
+        ]);
+
+        $res->assertOk()
+            ->assertJsonPath('result', true)
+            ->assertJsonPath('data.id', $team->id)
+            ->assertJsonPath('data.name', 'New Team')
+            ->assertJsonPath('data.description', '新説明')
+            ->assertJsonPath('data.public_status', 'invitation');
+
+        $this->assertDatabaseHas('teams', [
+            'id' => $team->id,
+            'name' => 'New Team',
+            'description' => '新説明',
+            'public_status' => 'invitation',
+        ]);
+    }
+
+    #[Test]
+    public function update_team_存在しない_i_dは422になる(): void
+    {
+        $res = $this->putJson('/api/v1/teams/00000000-0000-0000-0000-000000000000', [
+            'name' => 'New Team',
+            'description' => '新説明',
+            'public_status' => 'public',
+        ]);
+
+        $res->assertStatus(422)
+            ->assertJsonValidationErrors(['id']);
+    }
+
+    #[Test]
+    public function update_team_必須項目が無いと422になる(): void
+    {
+        $team = TeamModel::factory()->create();
+
+        $res = $this->putJson("/api/v1/teams/{$team->id}", []);
+
+        $res->assertStatus(422)
+            ->assertJsonValidationErrors(['name', 'description', 'public_status']);
+    }
+
+    #[Test]
+    public function update_team_例外時は500を返しロールバックする(): void
+    {
+        $team = TeamModel::factory()->create(['name' => 'Old Team']);
+
+        // Repository を例外送出モックに差し替え、catch(rollBack)分岐へ入れる
+        $repo = Mockery::mock(TeamRepositoryInterface::class);
+        $repo->shouldReceive('updateTeam')->andThrow(new RuntimeException('boom'));
+        $this->app->instance(TeamRepositoryInterface::class, $repo);
+
+        $res = $this->putJson("/api/v1/teams/{$team->id}", [
+            'name' => 'New Team',
+            'description' => '新説明',
+            'public_status' => 'public',
+        ]);
+
+        $res->assertStatus(500)
+            ->assertJsonPath('result', false);
+        // ロールバックで更新前の値のまま
+        $this->assertDatabaseHas('teams', ['id' => $team->id, 'name' => 'Old Team']);
+    }
 }

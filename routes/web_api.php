@@ -28,5 +28,7 @@ Route::group(['prefix' => 'api/v{version}'], function () {
         Route::get('', [TeamController::class, 'listTeam']);
         // チーム作成 /api/v1/teams
         Route::post('', [TeamController::class, 'createTeam']);
+        // チーム更新 /api/v1/teams/{チームID}
+        Route::put('{team_id}', [TeamController::class, 'updateTeam']);
     });
 });

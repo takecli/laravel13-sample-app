@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Applications\UseCase\Team\CreateTeamUseCase;
 use App\Applications\UseCase\Team\ListTeamUseCase;
+use App\Applications\UseCase\Team\UpdateTeamUseCase;
 use App\Http\Controllers\Controller;
 use App\Http\Reponses\ApiResponse;
 use App\Http\Requests\Team\CreateTeamRequest;
 use App\Http\Requests\Team\ListTeamRequest;
+use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Resources\Team\TeamsResource;
 use App\Http\Resources\TeamResource;
 use Exception;
@@ -60,6 +62,33 @@ class TeamController extends Controller
             return ApiResponse::success(__('messages.success', ['action' => 'Get', 'Teams']), $resource);
         } catch (Exception $e) {
             Log::error(__('messages.error', ['action' => 'Create', 'resource' => 'Team']));
+            report($e);
+            DB::rollBack();
+
+            return ApiResponse::serverError();
+        }
+    }
+
+    /**
+     * チーム更新
+     *
+     * @param  UpdateTeamRequest  $request
+     * @param  int  $version
+     * @param  UpdateTeamUseCase  $usecase
+     * @return JsonResponse
+     */
+    public function updateTeam(UpdateTeamRequest $request, int $version, UpdateTeamUseCase $usecase): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $res = $usecase->execute($request->toInput());
+            $resource = (new TeamResource($res))->toArray($request);
+
+            DB::commit();
+
+            return ApiResponse::success(__('messages.success', ['action' => 'Update', 'Teams']), $resource);
+        } catch (Exception $e) {
+            Log::error(__('messages.error', ['action' => 'Update', 'resource' => 'Team']));
             report($e);
             DB::rollBack();
 
