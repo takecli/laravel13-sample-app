@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Domains\Repositories\TeamRepositoryInterface;
+use App\Domains\Services\FileStorageInterface;
+use App\Infra\External\Aws\S3;
 use App\Infra\Persistence\TeamRepository;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
+        $this->app->bind(FileStorageInterface::class, S3::class);
     }
 
     /**

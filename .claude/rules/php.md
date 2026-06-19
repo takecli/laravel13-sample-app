@@ -51,9 +51,10 @@ alwaysApply: false
 
 `Http → Applications → Domains`。逆流・横断は禁止。
 
-- **Domains/**: 純粋 PHP。`use Illuminate\...` も Eloquent も**書かない**。エンティティ／値オブジェクト／enum／リポジトリ**インターフェース**のみ。
+- **Domains/**: 純粋 PHP。`use Illuminate\...` も Eloquent も外部 SDK も**書かない**。エンティティ／値オブジェクト／enum／リポジトリ**インターフェース**／外部サービスの**ポート**（`Domains/Services/〜Interface`）のみ。
 - **Applications/**（UseCase）: Input を受け取り、Domain の Filter に詰め替え、リポジトリ**インターフェース**経由でドメインを操作し、Output を返す。Eloquent を直接触らない。
 - **Infra/Persistence/**: リポジトリ**実装**。ここだけが `App\Models`（Eloquent）に触れる。`#[Override]` を付け、`modelToDomain()` で Eloquent → ドメインエンティティへ変換する。
+- **Infra/External/**: 外部サービス（AWS / SaaS / サードパーティ API）の**アダプタ実装**。ベンダー別にサブ名前空間を切る（例 `External/Aws/S3.php`）。Application/Domain は**ベンダー非依存のポート**（`Domains/Services/〜Interface`）に依存し、ここで `#[Override]` 実装する。**AWS SDK 等の型・用語（`Aws\...`・`putObject` 等）はこの層に閉じ込める**。バインドは `AppServiceProvider`（例: `$this->app->bind(FileStorageInterface::class, S3::class)`）。
 - **Http/Controllers/**: **薄く**保つ。`validate → UseCase → Resource → ApiResponse` のみ。ビジネスロジックを持たない。
 - **Http/Requests/**: バリデーションに加え、**検証済み入力を Application 層の Input DTO へ詰め替える `toInput()` を持つ**（→「入力の組み立て」）。
 - **Http/Resources/**: 出力整形は JsonResource。
@@ -135,7 +136,9 @@ PHPUnit 12。`Unit`／`Feature` の 2 スイート。**行カバレッジ 100%**
 ## やってはいけない
 
 - UseCase / Controller から `App\Models`（Eloquent）を直接参照する。
-- Domain 層に Laravel / Eloquent を持ち込む。
+- Domain 層に Laravel / Eloquent / 外部 SDK（`Aws\...` 等）を持ち込む。
+- Application / Domain から外部サービスの具象（`Infra\External\...`）に依存する（ポート `Domains/Services/〜Interface` 経由にする）。
+- 外部サービスのポートをベンダー名で命名する（`S3Interface` 等。能力で命名: `FileStorageInterface`）。
 - リポジトリをインターフェース無しで具象に直結する。
 - コントローラにビジネスロジックを書く。
 - Input DTO（Application層）に HTTP 入力の変換（文字列→enum 等）を持たせる（FormRequest の `toInput()` に集約する）。
