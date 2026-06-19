@@ -22,6 +22,8 @@ return [
     ],
     'region' => env('AWS_REGION', 'us-east-1'),
     'version' => 'latest',
+    'endpoint' => env('AWS_ENDPOINT') ?: null, // 本番は未設定→本物のAWS
+    'use_path_style_endpoint' => (bool) env('AWS_USE_PATH_STYLE_ENDPOINT', false),
     'ua_append' => [
         'L5MOD/' . AwsServiceProvider::VERSION,
     ],
