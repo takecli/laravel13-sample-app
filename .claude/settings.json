@@ -1,4 +1,13 @@
 {
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(~/.aws/**)",
+      "Read(~/.ssh/**)",
+      "Bash(rm -rf:*)"
+    ]
+  },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
       "source": { "source": "github", "repo": "obra/superpowers-marketplace" }
