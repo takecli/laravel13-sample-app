@@ -1,58 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# laravel-13-sample-app
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+学習ポータルのサンプルアプリ。バックエンドは **レイヤード/クリーンアーキテクチャ** を採用した Laravel API、フロントは React SPA。
 
-## About Laravel
+## 技術スタック
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend**: PHP `^8.3` / Laravel `^13.8` / PHPUnit `^12.5` / Pint / Mockery
+- **Frontend**: React `19` / TypeScript `6` / TanStack Router / Chakra UI `v3` / Tailwind `4` / Vite `8`
+- **認証**: Keycloak（Laravel Socialite, セッション/BFF 方式）
+- **DB**: MySQL 8（開発 `learning_portal` / テスト `learning_portal_testing`）
+- **ストレージ**: S3（開発は LocalStack でエミュレート）
+- **実行環境**: Docker Compose（`app` / `web`=nginx:7888 / `mysql`:6306 / `tbls` / `localstack`:4566）
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## アーキテクチャ
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+`app/` は依存方向が一方向（`Http → Applications → Domains`）のレイヤード構成。`Team` 機能が全レイヤーを通したリファレンス実装（縦切り）です。
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+app/
+├── Http/          入口（Controllers / Requests / Resources / Reponses）
+├── Applications/  ユースケース層（UseCase / Input / Output DTO）
+├── Domains/       ドメイン層（Models / Enums / Repositories(IF) / Services(IF)）
+├── Infra/         インフラ層（Persistence=Eloquent実装 / External=外部SDK実装）
+├── Models/        Eloquent モデル（Reliese 生成。Infra からのみ触る）
+└── Providers/     DI バインド（interface → impl）
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+詳細な開発ガイド・規約は **[CLAUDE.md](./CLAUDE.md)** と `.claude/rules/`、設計仕様は `docs/superpowers/` を参照。
 
-## Contributing
+## セットアップ
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# コンテナ起動
+docker compose up -d app mysql web localstack
 
-## Code of Conduct
+# 依存インストール・アプリキー・マイグレーション
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+task migrate:apply
+task migrate:seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# フロント
+npm install
+npm run dev
+```
 
-## Security Vulnerabilities
+`.env` は `.env.example` を複製して設定する（DB / Keycloak / AWS など）。
+※ `.env` 等のシークレットは Git 管理外（`.gitignore`）。
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 主な API（`/api/v{version}`）
 
-## License
+| メソッド | パス | 概要 |
+|---|---|---|
+| GET | `/api/v1/auth` | 認証ユーザー情報取得 |
+| GET | `/api/v1/auth/keycloak/redirect` | Keycloak 認可リダイレクト |
+| GET | `/api/v1/auth/keycloak/callback` | Keycloak コールバック |
+| GET | `/api/v1/teams` | チーム一覧（`public_status` 等で絞り込み） |
+| POST | `/api/v1/teams` | チーム作成 |
+| PUT | `/api/v1/teams/{team_id}` | チーム更新 |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+レスポンスは共通エンベロープ `{ data, message, result }`。`teams` は認証必須（未認証は 401 JSON）。
+
+## よく使うコマンド
+
+```bash
+# 品質ゲート（コミット前に通す）
+task php:pint              # Pint で整形
+task php:coverage-text     # テスト + カバレッジ（行 100% を維持）
+
+# マイグレーション
+task migrate:apply         # migrate
+task migrate:fresh         # migrate:fresh
+task migrate:seed          # db:seed
+
+# 生成（artisan make ラッパ）
+task php:make -- model Team -m
+task php:make-table -- create_foos_table FooSeeder   # migration + seeder をセット生成
+
+# フロント
+npm run dev                # Vite 開発サーバ
+npm run build              # ビルド
+```
+
+## テスト
+
+PHPUnit 12（`Unit` / `Feature` の 2 スイート）。**行カバレッジ 100% を維持**します。
+
+```bash
+task php:coverage-text                                   # 全体 + カバレッジ
+docker compose exec app ./vendor/bin/phpunit --filter Foo  # 個別
+```
+
+> マイグレーションは MySQL 専用の生 SQL（`UUID_TO_BIN` / `ENUM` / `COMMENT`）のため、Feature テストは MySQL のテスト DB（`learning_portal_testing` / `.env.testing`）を前提とします（sqlite では動きません）。
+
+## ストレージ（LocalStack）
+
+S3 は開発時 LocalStack でエミュレートします。`docker compose up -d localstack` で起動し、`docker/localstack/ready.d/init-aws.sh` が起動時にバケットを自動作成します。アプリは `Domains/Services/FileStorageInterface`（ポート）経由で利用し、実体は `Infra/External/Aws/S3` が実装します。
+
+## ライセンス
+
+本リポジトリはサンプル用途です。Laravel フレームワーク本体は [MIT ライセンス](https://opensource.org/licenses/MIT)。
