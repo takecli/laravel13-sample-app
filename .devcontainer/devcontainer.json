@@ -1,0 +1,68 @@
+{
+    "name": "laravel-13-sample-app",
+    // 既存の Docker Compose を再利用する（app サービスで作業）
+    "dockerComposeFile": [
+        "../docker-compose.yaml"
+    ],
+    "service": "app",
+    "workspaceFolder": "/work",
+    // devcontainer 終了時に関連サービスも停止
+    "shutdownAction": "stopCompose",
+    // app だけでなく依存サービスも起動しておく
+    "runServices": [
+        "app",
+        "mysql",
+        "web",
+        "localstack"
+    ],
+    "forwardPorts": [
+        7888,
+        6306,
+        4566
+    ],
+    "portsAttributes": {
+        "7888": {
+            "label": "web (nginx)"
+        },
+        "6306": {
+            "label": "mysql"
+        },
+        "4566": {
+            "label": "localstack"
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "open-southeners.laravel-pint",
+                "MehediDracula.php-namespace-resolver",
+                "ms-azuretools.vscode-docker",
+                "bradlc.vscode-tailwindcss",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "EditorConfig.EditorConfig"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "[php]": {
+                    "editor.defaultFormatter": "open-southeners.laravel-pint"
+                },
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "intelephense.environment.phpVersion": "8.5.0"
+            }
+        }
+    },
+    // コンテナ作成後に依存をインストール（vendor / node_modules は volume 外なので毎回必要になり得る）
+    "postCreateCommand": [
+        "composer install --no-interaction && npm install",
+        "sudo chown -R vscode:vscode /home/vscode/.claude"
+    ],
+    "remoteUser": "root"
+}
